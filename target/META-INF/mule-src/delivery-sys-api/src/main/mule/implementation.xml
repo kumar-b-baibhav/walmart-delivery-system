@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="insertData" doc:id="74f7402e-e656-415e-8e73-9567b43ee3ea" >
+		<db:insert doc:name="DatatoDb" doc:id="4d11f246-7acf-44db-9687-652ccaed3651" config-ref="Database_Config">
+			<error-mapping sourceType="DB:CONNECTIVITY" targetType="APP:NO_CONNECTION" />
+			<db:sql ><![CDATA[INSERT INTO Delivery_Details(store_id, store_name, store_address, store_distance, store_contact_number, 
+product_type_id, quantity) 
+VALUES (:store_id, :store_name, :store_address, :store_distance, :store_contact_number, 
+:product_type_id, :quantity)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{"store_id": payload.store_id, 
+"store_name": payload.store_name,
+"store_address": payload.store_address,
+"store_distance": payload.store_distance,
+"store_contact_number": payload.store_contact_number,
+"product_type_id": payload.product_type_id,
+"quantity": payload.quantity}]]]></db:input-parameters>
+		</db:insert>
+		<logger level="INFO" doc:name="Logger" doc:id="ffb326d7-750f-45dd-89de-3482fa4394fc" />
+		<set-payload value='#[output application/json&#10;---&#10;{&#10;	message: "success"&#10;}]' doc:name="Set Payload" doc:id="544c0660-2576-4390-8cd7-a06b18be3e58" />
+	</flow>
+</mule>

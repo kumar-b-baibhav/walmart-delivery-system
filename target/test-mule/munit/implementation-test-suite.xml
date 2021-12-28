@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="implementation-test-suite.xml" />
+	<munit:test name="implementation-test-suite-insertDataTest-success" doc:id="8cb0fb39-b9e8-4daf-bc10-d950eeb47c01" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="763bf0af-af91-457c-bb5d-c3bf1c7e4247" processor="db:insert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4d11f246-7acf-44db-9687-652ccaed3651" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('success-response.json')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="967417c1-ef28-47dc-9a01-f15f239fb57b" >
+				<munit:payload value="#[MunitTools::getResourceAsString('success-request.json')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to insertData" doc:id="3328b626-8e2a-46a9-919f-4672d3bce44e" name="insertData"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="040da9f3-65fe-45f8-86a8-14462617e2a3" is='#[MunitTools::equalTo("success")]' expression="#[payload.message]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-insertDataTest-error" doc:id="5bf47d26-3b37-4e55-8d6f-5e8bf8f13bc3" description="Test">
+			<munit:execution>
+				<munit:set-event doc:name="Set Event" doc:id="ea695b47-8cc3-4d98-bef0-1f93363bacb4">
+				<munit:payload value="#[MunitTools::getResourceAsString('error-request.json')]" />
+				</munit:set-event>
+			<try doc:name="Try" doc:id="bb8928c6-ea76-4e81-a37d-9bde67d94baf" >
+				<flow-ref doc:name="Flow-ref to insertData" doc:id="54d7b8b6-adc8-46e8-84ce-871e384b6c5a" name="insertData" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="274ac92e-4b26-45f3-958f-3a3ea24d9064" />
+				</error-handler>
+			</try>
+			</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="0b9b2f7e-bc6e-485e-a2e6-a8864861f1ab" processor="ee:transform" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Error Message" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+		</munit:test>
+
+
+</mule>

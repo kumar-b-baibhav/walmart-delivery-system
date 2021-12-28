@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="interface-suite.xml" />
+	<munit:test name="post:\delivery-detail\insert:application\json:delivery-sys-api-config-test-success" doc:id="890d1239-af73-43ff-9312-0bc14ad75ad2" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock insertData" doc:id="4fb8058d-5bf9-4670-8ba8-3884b0ea46c6" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="12a85b7f-3ff0-4be1-9868-80b91b27b793" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://postdeliverydetailinsertapplicationjsondeliverysysapiconfigtestsuccess\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://postdeliverydetailinsertapplicationjsondeliverysysapiconfigtestsuccess\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="4dce1db8-259e-4e22-b471-7f244aa20c15" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://postdeliverydetailinsertapplicationjsondeliverysysapiconfigtestsuccess\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://postdeliverydetailinsertapplicationjsondeliverysysapiconfigtestsuccess\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://postdeliverydetailinsertapplicationjsondeliverysysapiconfigtestsuccess\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\delivery-detail\insert:application\json:delivery-sys-api-config" doc:id="315a3217-2f2a-4a52-9128-116ea4dbd005" name="post:\delivery-detail\insert:application\json:delivery-sys-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="5688cd59-8e69-47ae-9fb8-cf82efd094fc" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import postdeliverydetailinsertapplicationjsondeliverysysapiconfigtestsuccess::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="delivery-sys-api-main-test-success" doc:id="c0ad3274-086b-48ab-b77d-a04994d308ce" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock APIkit Router" doc:id="7ba14b44-0ded-4b28-b8ac-263614c1b931" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="78e15483-2277-4e14-a941-407b8864bd01" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://deliverysysapimaintestsuccess\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://deliverysysapimaintestsuccess\mock_variable_.dwl')]" />
+						<munit-tools:variable key="httpStatus" value="#[readUrl('classpath://deliverysysapimaintestsuccess\mock_variable_1.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="ac13429f-e8e9-4d44-9288-43e3e66536ac" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://deliverysysapimaintestsuccess\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://deliverysysapimaintestsuccess\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to delivery-sys-api-main" doc:id="6a43f6dd-f158-46c1-969f-1791e8f9be2d" name="delivery-sys-api-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="83040a7f-b6ee-404f-a81d-bd27c21f922d" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import deliverysysapimaintestsuccess::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
